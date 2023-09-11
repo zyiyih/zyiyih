@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间测试</title>
+    <style>
+        body {
+            background-color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #countdown {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #word {
+            font-size: 36px;
+            margin-top: 20px;
+        }
+        #timer {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        #got-it-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">Begin in <span id="countdown-timer">10</span> seconds</div>
+    <div id="word"></div>
+    <div id="timer"></div>
+    <button id="got-it-button">Got it</button>
+
+    <script>
+        let words = [
+            // 在这里添加您的 192 组单词，每组以数组形式表示。
+        ];
+        let currentWordIndex = 0;
+        let currentWordPairIndex = 0;
+        let countdownTimer = 10;
+        let timerInterval;
+
+        function startCountdown() {
+            timerInterval = setInterval(function() {
+                countdownTimer--;
+                document.getElementById('countdown-timer').textContent = countdownTimer;
+                if (countdownTimer === 0) {
+                    clearInterval(timerInterval);
+                    showWordPair();
+                }
+            }, 1000);
+        }
+
+        function showWordPair() {
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('word').textContent = words[currentWordIndex][currentWordPairIndex];
+            currentWordPairIndex++;
+            startTimer();
+        }
+
+        function startTimer() {
+            let startTime = new Date().getTime();
+            timerInterval = setInterval(function() {
+                let currentTime = new Date().getTime();
+                let elapsedTime = (currentTime - startTime) / 1000;
+                document.getElementById('timer').textContent = elapsedTime.toFixed(2) + ' seconds';
+            }, 10);
+        }
+
+        document.getElementById('got-it-button').addEventListener('click', function() {
+            if (currentWordPairIndex === 2) {
+                currentWordIndex++;
+                currentWordPairIndex = 0;
+                document.getElementById('word').textContent = '';
+                document.getElementById('timer').textContent = '';
+                if (currentWordIndex < words.length) {
+                    startCountdown();
+                } else {
+                    document.getElementById('got-it-button').style.display = 'none';
+                }
+            } else {
+                showWordPair();
+            }
+        });
+
+        startCountdown();
+    </script>
+</body>
+</html>
